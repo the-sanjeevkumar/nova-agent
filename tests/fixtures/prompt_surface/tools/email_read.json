@@ -1,0 +1,28 @@
+{
+  "description": "Read one email message completely after an email_search call. Returns headers, plain-text body, and attachments as cached local file copies you can read directly. Marks the message read unless mark_read is false.",
+  "name": "email_read",
+  "parameters": {
+    "properties": {
+      "body_chars": {
+        "description": "Body character cap. Default 20000, max 50000; re-read with a higher cap for the rest.",
+        "type": "integer"
+      },
+      "folder": {
+        "description": "Folder the UID belongs to (must match the email_search folder). Default INBOX.",
+        "type": "string"
+      },
+      "mark_read": {
+        "description": "Flag the message read server-side. Default true.",
+        "type": "boolean"
+      },
+      "uid": {
+        "description": "Numeric UID from email_search (plain digits).",
+        "type": "string"
+      }
+    },
+    "required": [
+      "uid"
+    ],
+    "type": "object"
+  }
+}

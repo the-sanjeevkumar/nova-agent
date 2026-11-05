@@ -1,0 +1,462 @@
+/* ============================================================================
+   Midnight Aurora — Nova Agent Design System Tokens
+   
+   Centralized design tokens for the Nova Agent desktop app.
+   All colors, typography, spacing, radius, shadow, and animation values
+   live here. Components reference these tokens only — no hardcoded hexes.
+   
+   Palette:
+     PRIMARY BACKGROUND: #090D18   (midnight navy)
+     SIDEBAR:           #0D1424   (deep charcoal)
+     SECONDARY BG:      #111A2C
+     CARD BG:           #131D31
+     ELEVATED:          #1A2740
+     PRIMARY ACCENT:    #7167F8   (indigo)
+     ELECTRIC BLUE:     #438BFA
+     CYAN:              #39C6DF
+     PRIMARY TEXT:      #F4F6FC
+     SECONDARY TEXT:    #98A5BB
+     MUTED TEXT:        #687791
+     BORDER:            #27334B
+     SUCCESS:           #35C99A
+     WARNING:           #F5B94F
+     ERROR:             #F16B75
+   ============================================================================ */
+
+@layer base {
+  :root {
+    color-scheme: dark;
+
+    /* ── Brand identity ── */
+    --nova-brand-name: "Nova Agent";
+    --nova-brand-accent: #7167F8;
+    --nova-brand-accent-hover: #8a7dff;
+    --nova-brand-electric: #438BFA;
+    --nova-brand-cyan: #39C6DF;
+
+    /* ── Surfaces ── */
+    --nova-bg-primary: #090D18;
+    --nova-bg-sidebar: #0D1424;
+    --nova-bg-secondary: #111A2C;
+    --nova-bg-card: #131D31;
+    --nova-bg-elevated: #1A2740;
+
+    /* ── Text ── */
+    --nova-text-primary: #F4F6FC;
+    --nova-text-secondary: #98A5BB;
+    --nova-text-muted: #687791;
+    --nova-text-inverse: #090D18;
+
+    /* ── Borders ── */
+    --nova-border: #27334B;
+    --nova-border-hover: #3B4A63;
+    --nova-border-focus: #7167F8;
+    --nova-border-input: #27334B;
+
+    /* ── Accents ── */
+    --nova-accent-primary: #7167F8;
+    --nova-accent-electric: #438BFA;
+    --nova-accent-cyan: #39C6DF;
+    --nova-accent-primary-soft: color-mix(in srgb, #7167F8 12%, transparent);
+    --nova-accent-electric-soft: color-mix(in srgb, #438BFA 10%, transparent);
+    --nova-accent-cyan-soft: color-mix(in srgb, #39C6DF 10%, transparent);
+
+    /* ── Semantic ── */
+    --nova-success: #35C99A;
+    --nova-success-soft: color-mix(in srgb, #35C99A 12%, transparent);
+    --nova-warning: #F5B94F;
+    --nova-warning-soft: color-mix(in srgb, #F5B94F 12%, transparent);
+    --nova-error: #F16B75;
+    --nova-error-soft: color-mix(in srgb, #F16B75 12%, transparent);
+
+    /* ── Gradients (used selectively) ── */
+    --nova-gradient-primary: linear-gradient(135deg, #7167F8 0%, #438BFA 100%);
+    --nova-gradient-aurora: linear-gradient(135deg, #090D18 0%, #111A2C 50%, #1A2740 100%);
+    --nova-gradient-accent: linear-gradient(135deg, #7167F8 0%, #39C6DF 100%);
+
+    /* ── Typography ── */
+    --nova-font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --nova-font-mono: "JetBrains Mono", "Cascadia Code", "Cascadia Mono", "DejaVu Sans Mono", "Liberation Mono", "Noto Sans Mono", "Noto Mono", "SF Mono", ui-monospace, Menlo, Consolas, monospace, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --nova-font-display: var(--nova-font-sans);
+
+    --nova-text-base-size: 0.875rem;      /* 14px */
+    --nova-text-line-height: 1.55;
+    --nova-text-letter-spacing: 0;
+
+    /* Headings */
+    --nova-heading-font-weight: 600;
+    --nova-heading-letter-spacing: -0.02em;
+    --nova-text-h1: 1.5rem;      /* 24px */
+    --nova-text-h1-line-height: 1.3;
+    --nova-text-h2: 1.25rem;     /* 20px */
+    --nova-text-h2-line-height: 1.35;
+    --nova-text-h3: 1.125rem;    /* 18px */
+    --nova-text-h3-line-height: 1.4;
+    --nova-text-h4: 1rem;        /* 16px */
+    --nova-text-h4-line-height: 1.45;
+
+    /* Body */
+    --nova-text-sm: 0.8125rem;   /* 13px */
+    --nova-text-sm-line-height: 1.5;
+    --nova-text-xs: 0.75rem;     /* 12px */
+    --nova-text-xs-line-height: 1.45;
+    --nova-text-caption: 0.6875rem; /* 11px */
+    --nova-text-caption-line-height: 1.4;
+
+    /* ── Spacing ── */
+    --nova-space-0: 0;
+    --nova-space-1: 0.25rem;     /* 4px */
+    --nova-space-2: 0.5rem;      /* 8px */
+    --nova-space-3: 0.75rem;     /* 12px */
+    --nova-space-4: 1rem;        /* 16px */
+    --nova-space-5: 1.25rem;     /* 20px */
+    --nova-space-6: 1.5rem;      /* 24px */
+    --nova-space-8: 2rem;        /* 32px */
+    --nova-space-10: 2.5rem;     /* 40px */
+    --nova-space-12: 3rem;       /* 48px */
+
+    /* ── Border radius ── */
+    --nova-radius-none: 0;
+    --nova-radius-sm: 0.375rem;  /* 6px */
+    --nova-radius-md: 0.5rem;    /* 8px */
+    --nova-radius-lg: 0.75rem;   /* 12px */
+    --nova-radius-xl: 1rem;      /* 16px */
+    --nova-radius-2xl: 1.5rem;   /* 24px */
+    --nova-radius-full: 9999px;
+
+    /* ── Shadows ── */
+    --nova-shadow-sm: 0 1px 2px color-mix(in srgb, #000 25%, transparent),
+                      0 0 0 1px color-mix(in srgb, #000 10%, transparent);
+    --nova-shadow-md: 0 4px 6px -1px color-mix(in srgb, #000 20%, transparent),
+                      0 2px 4px -2px color-mix(in srgb, #000 12%, transparent);
+    --nova-shadow-lg: 0 10px 15px -3px color-mix(in srgb, #000 25%, transparent),
+                      0 4px 6px -4px color-mix(in srgb, #000 15%, transparent);
+    --nova-shadow-xl: 0 20px 25px -5px color-mix(in srgb, #000 30%, transparent),
+                      0 8px 10px -6px color-mix(in srgb, #000 20%, transparent);
+    --nova-shadow-glow-primary: 0 0 20px color-mix(in srgb, #7167F8 35%, transparent);
+    --nova-shadow-glow-electric: 0 0 20px color-mix(in srgb, #438BFA 25%, transparent);
+
+    /* ── Z-index ladder ── */
+    --nova-z-dropdown: 100;
+    --nova-z-sticky: 200;
+    --nova-z-fixed: 300;
+    --nova-z-modal-backdrop: 1200;
+    --nova-z-modal: 1300;
+    --nova-z-modal-popover: 1400;
+    --nova-z-over-modal: 2000;
+    --nova-z-toast: 2100;
+    --nova-z-tooltip: 2200;
+
+    /* ── Animation durations ── */
+    --nova-duration-fast: 100ms;
+    --nova-duration-normal: 200ms;
+    --nova-duration-slow: 300ms;
+    --nova-easing-ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --nova-easing-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --nova-easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* ── Component defaults ── */
+    --nova-component-border-width: 1px;
+    --nova-component-focus-ring: 0 0 0 2px color-mix(in srgb, #7167F8 50%, transparent);
+    --nova-component-focus-outline: 2px solid #7167F8;
+
+    /* ── Chat surface ── */
+    --nova-chat-bg: #090D18;
+    --nova-chat-surface: #0D1424;
+    --nova-chat-bubble-user: #131D31;
+    --nova-chat-bubble-assistant: #0D1424;
+    --nova-chat-bubble-border: #27334B;
+
+    /* ── Composer ── */
+    --nova-composer-bg: #0D1424;
+    --nova-composer-border: #27334B;
+    --nova-composer-focus-border: #7167F8;
+    --nova-composer-bg-hover: #111A2C;
+
+    /* ── Sidebar ── */
+    --nova-sidebar-width: 14.8125rem;
+    --nova-sidebar-collapsed-width: 3.5rem;
+    --nova-sidebar-bg: #0D1424;
+    --nova-sidebar-border: #27334B;
+    --nova-sidebar-hover: #111A2C;
+    --nova-sidebar-active: #1A2740;
+    --nova-sidebar-accent: #7167F8;
+
+    /* ── Settings ── */
+    --nova-settings-bg: #090D18;
+    --nova-settings-card: #0D1424;
+    --nova-settings-border: #27334B;
+
+    /* ── Legacy shadcn/Radix compatibility ── */
+    --dt-background: var(--nova-bg-primary);
+    --dt-foreground: var(--nova-text-primary);
+    --dt-card: var(--nova-bg-card);
+    --dt-card-foreground: var(--nova-text-primary);
+    --dt-muted: var(--nova-bg-secondary);
+    --dt-muted-foreground: var(--nova-text-muted);
+    --dt-popover: var(--nova-bg-elevated);
+    --dt-popover-foreground: var(--nova-text-primary);
+    --dt-primary: var(--nova-accent-primary);
+    --dt-primary-foreground: #FFFFFF;
+    --dt-secondary: var(--nova-bg-secondary);
+    --dt-secondary-foreground: var(--nova-text-secondary);
+    --dt-accent: var(--nova-accent-primary);
+    --dt-accent-foreground: var(--nova-text-primary);
+    --dt-border: var(--nova-border);
+    --dt-input: var(--nova-border-input);
+    --dt-ring: var(--nova-border-focus);
+    --dt-destructive: var(--nova-error);
+    --dt-destructive-foreground: #FFFFFF;
+    --dt-sidebar-bg: var(--nova-sidebar-bg);
+    --dt-sidebar-border: var(--nova-sidebar-border);
+
+    /* ── Font stacks ── */
+    --dt-font-sans: var(--nova-font-sans);
+    --dt-font-mono: var(--nova-font-mono);
+    --dt-font-kbd: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+
+    /* ── Base sizing ── */
+    --dt-base-size: var(--nova-text-base-size);
+    --dt-line-height: var(--nova-text-line-height);
+    --dt-letter-spacing: var(--nova-text-letter-spacing);
+    --dt-spacing-mul: 1;
+
+    /* ── Radius (shadcn) ── */
+    --radius: var(--nova-radius-md);
+    --radius-scalar: 0.667;
+
+    /* ── Sidebar tokens ── */
+    --sidebar: var(--nova-sidebar-bg);
+    --sidebar-foreground: var(--nova-text-primary);
+    --sidebar-primary: var(--nova-accent-primary);
+    --sidebar-primary-foreground: #FFFFFF;
+    --sidebar-accent: var(--nova-accent-primary-soft);
+    --sidebar-accent-foreground: var(--nova-text-primary);
+    --sidebar-border: var(--nova-sidebar-border);
+    --sidebar-ring: var(--nova-border-focus);
+    --sidebar-edge-border: color-mix(in srgb, var(--nova-text-primary) 8%, transparent);
+
+    /* ── UI surface tokens ── */
+    --ui-bg-chrome: var(--nova-bg-primary);
+    --ui-bg-sidebar: var(--nova-sidebar-bg);
+    --ui-bg-editor: var(--nova-bg-card);
+    --ui-bg-elevated: var(--nova-bg-elevated);
+    --ui-bg-card: var(--nova-bg-card);
+    --ui-bg-input: var(--nova-bg-card);
+    --ui-chat-surface-background: var(--nova-chat-bg);
+    --ui-sidebar-surface-background: var(--nova-sidebar-bg);
+    --ui-editor-surface-background: var(--nova-bg-card);
+    --ui-terminal-surface-background: var(--nova-chat-bg);
+    --ui-widget-surface-background: color-mix(in srgb, var(--nova-bg-card) 88%, #000);
+    --ui-chat-bubble-background: var(--nova-chat-bubble-user);
+    --ui-chat-bubble-opaque-background: var(--nova-bg-card);
+    --ui-inline-code-background: color-mix(in srgb, #FFFFFF 8%, transparent);
+    --ui-inline-code-foreground: color-mix(in srgb, #FFFFFF 88%, transparent);
+    --ui-selection-background: color-mix(in srgb, #7167F8 35%, transparent);
+
+    /* ── Text hierarchy ── */
+    --ui-text-primary: var(--nova-text-primary);
+    --ui-text-secondary: var(--nova-text-secondary);
+    --ui-text-tertiary: var(--nova-text-muted);
+    --ui-text-quaternary: color-mix(in srgb, var(--nova-text-muted) 50%, transparent);
+
+    /* ── Strokes ── */
+    --ui-stroke-primary: var(--nova-border);
+    --ui-stroke-secondary: var(--nova-border);
+    --ui-stroke-tertiary: var(--nova-border);
+    --ui-stroke-quaternary: color-mix(in srgb, var(--nova-text-primary) 4%, transparent);
+
+    /* ── Control states ── */
+    --ui-row-hover-background: color-mix(in srgb, #FFFFFF 4%, transparent);
+    --ui-row-active-background: color-mix(in srgb, #7167F8 10%, transparent);
+    --ui-control-hover-background: color-mix(in srgb, #FFFFFF 6%, transparent);
+    --ui-control-active-background: color-mix(in srgb, #7167F8 12%, transparent);
+    --ui-row-open-background: color-mix(in srgb, var(--ui-row-active-background) 28%, transparent);
+
+    /* ── Misc ── */
+    --ui-success: var(--nova-success);
+    --shadow-nous:
+      0 0.125rem 0.25rem -0.125rem color-mix(in srgb, #000 30%, transparent),
+      0 0.5rem 0.75rem -0.375rem color-mix(in srgb, #000 25%, transparent),
+      0 1.25rem 1.75rem -0.875rem color-mix(in srgb, #000 20%, transparent),
+      0 2.25rem 3rem -1.75rem color-mix(in srgb, #000 10%, transparent);
+    --stroke-nous: color-mix(in srgb, currentColor 4%, transparent);
+    --chrome-action-hover: var(--ui-control-hover-background);
+
+    /* ── Spacing ── */
+    --spacing-mul: 1;
+
+    /* ── Conversation typography ── */
+    --conversation-text-base-size: 0.8125rem;
+    --conversation-tool-base-size: 0.6875rem;
+    --conversation-caption-base-size: 0.75rem;
+    --conversation-base-line-height: 1.125rem;
+    --conversation-caption-line-height: 1rem;
+    --conversation-text-font-size: var(--conversation-text-base-size);
+    --conversation-tool-font-size: var(--conversation-tool-base-size);
+    --conversation-caption-font-size: var(--conversation-caption-base-size);
+    --conversation-line-height: var(--conversation-base-line-height);
+    --conversation-caption-line-height: var(--conversation-caption-line-height);
+    --conversation-turn-gap: 0.375rem;
+    --turn-block-gap: 0.75rem;
+    --scaffold-block-gap: calc(var(--turn-block-gap) / 3);
+    --tool-row-gap: 0.375rem;
+    --paragraph-gap: 0.7rem;
+
+    /* ── Layout ── */
+    --sidebar-width: var(--nova-sidebar-width);
+    --chat-min-width: 28rem;
+    --titlebar-control-size: 24px;
+    --titlebar-control-height: 24px;
+    --titlebar-icon-size: 13.9px;
+    --sidebar-content-inline-padding: 1rem;
+
+    /* ── Composer ── */
+    --composer-width: 100%;
+    --composer-control-size: 1.5rem;
+    --composer-control-primary-size: 1.625rem;
+    --composer-voice-menu-size: 1.25rem;
+    --composer-control-gap: 0.25rem;
+    --composer-row-gap: 0.25rem;
+    --composer-ring-strength: 1;
+    --composer-surface-pad-x: 0.5rem;
+    --composer-surface-pad-y: 0.3125rem;
+    --composer-input-min-height: 1.625rem;
+    --composer-input-max-height: 9.375rem;
+    --composer-input-inline-min-width: 8rem;
+    --composer-fallback-height: 2.75rem;
+    --composer-measured-height: calc(0.5rem + 0.625rem + 2.75rem);
+    --composer-surface-measured-height: 2.75rem;
+
+    /* ── Z-index ── */
+    --z-modal-backdrop: 1200;
+    --z-modal: 1300;
+    --z-modal-popover: 1400;
+    --z-over-modal: 2000;
+    --z-over-modal-content: 2100;
+    --z-switcher-backdrop: 2190;
+    --z-switcher: 2200;
+    --z-connecting: 1200;
+    --z-onboarding: 1300;
+    --z-setup: 1400;
+    --z-crash: 1500;
+
+    /* ── Reduced transparency ── */
+    --backdrop-invert-mul: 0;
+    --noise-opacity-mul: 1;
+
+    /* ── Glass ── */
+    --translucency-glass-keep: 100%;
+  }
+
+  :root.dark {
+    /* Midnight Aurora is dark-first; the :root values above are the dark values */
+    --theme-neutral-chrome: #090D18;
+    --theme-neutral-sidebar: #0D1424;
+    --theme-neutral-card: #131D31;
+
+    --ui-red: #F16B75;
+    --ui-green: #35C99A;
+    --ui-cyan: #39C6DF;
+    --ui-diff-add-foreground: color-mix(in srgb, #35C99A 62%, #FFF);
+    --ui-diff-remove-foreground: color-mix(in srgb, #F16B75 62%, #FFF);
+
+    --sidebar-edge-border: color-mix(in srgb, var(--nova-text-primary) 12%, transparent);
+    --composer-ring-strength: 1.3;
+    --backdrop-invert-mul: 0;
+
+    --dt-input-inset: inset 0 1px 1px color-mix(in srgb, #000 38%, transparent);
+    --ui-tab-hover-darken: 6%;
+    --dt-input-border: 4%;
+
+    --ui-inline-code-background: color-mix(in srgb, #FFFFFF 8%, transparent);
+    --ui-inline-code-foreground: color-mix(in srgb, #FFFFFF 88%, transparent);
+    --ui-selection-background: color-mix(in srgb, #7167F8 35%, transparent);
+
+    --ui-widget-surface-background: color-mix(in srgb, var(--nova-bg-card) 88%, #000);
+  }
+
+  /* Base element styles */
+  * {
+    box-sizing: border-box;
+    border-color: var(--nova-border);
+  }
+
+  html, body, #root {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  html {
+    font-size: var(--nova-text-base-size);
+  }
+
+  body {
+    margin: 0;
+    background: var(--nova-bg-primary);
+    color: var(--nova-text-primary);
+    font-family: var(--nova-font-sans);
+    font-size: var(--nova-text-base-size);
+    line-height: var(--nova-text-line-height);
+    letter-spacing: var(--nova-text-letter-spacing);
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button, textarea {
+    font: inherit;
+  }
+
+  *::selection {
+    background: var(--nova-accent-primary);
+    color: #FFFFFF;
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* ── Focus visible ── */
+  :focus-visible {
+    outline: var(--nova-component-focus-outline);
+    outline-offset: 2px;
+  }
+
+  /* ── Utility: gradient text ── */
+  .text-gradient-nova {
+    background: var(--nova-gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Utility: glass surface ── */
+  .glass-surface {
+    background: color-mix(in srgb, var(--nova-bg-elevated) 85%, transparent);
+    backdrop-filter: blur(0.5rem);
+    -webkit-backdrop-filter: blur(0.5rem);
+    border: 1px solid var(--nova-border);
+  }
+
+  /* ── Utility: subtle glow ── */
+  .glow-primary {
+    box-shadow: var(--nova-shadow-glow-primary);
+  }
+  .glow-electric {
+    box-shadow: var(--nova-shadow-glow-electric);
+  }
+
+  /* ── Button focus ring ── */
+  button:focus-visible,
+  [role="button"]:focus-visible {
+    outline: var(--nova-component-focus-outline);
+    outline-offset: 2px;
+  }
+}

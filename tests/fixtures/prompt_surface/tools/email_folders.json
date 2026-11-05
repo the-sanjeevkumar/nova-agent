@@ -1,0 +1,9 @@
+{
+  "description": "List the folder names of the configured email account, server-spelled. Pass a returned name verbatim as the folder argument for email_search or email_read; UTF-7-encoded names are IMAP's literal spelling.",
+  "name": "email_folders",
+  "parameters": {
+    "properties": {},
+    "required": [],
+    "type": "object"
+  }
+}

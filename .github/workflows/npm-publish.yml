@@ -1,0 +1,35 @@
+name: Publish Nova Agent to npm
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g. v1.0.0)'
+        required: true
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish @the-sanjeevkumar/nova-agent
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Sync package version to the tag
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          if [ -n "${{ inputs.version }}" ]; then VERSION="${{ inputs.version }}"; VERSION="${VERSION#v}"; fi
+          npm version "$VERSION" --no-git-tag-version --allow-same-version
+      - name: Publish
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,0 +1,537 @@
+Metadata-Version: 2.4
+Name: nova-agent
+Version: 1.0.0
+Summary: The self-improving AI agent — creates skills from experience, improves them during use, and runs anywhere
+Author: Nous Research
+License-Expression: MIT
+Requires-Python: <3.15,>=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: openai==2.54.0; python_version >= "3.14"
+Requires-Dist: certifi==2026.10.19; python_version >= "3.14"
+Requires-Dist: truststore==0.10.5; python_version >= "3.14"
+Requires-Dist: python-dotenv==1.2.4; python_version >= "3.14"
+Requires-Dist: fire==0.7.1; python_version >= "3.14"
+Requires-Dist: httpx[socks]==0.28.1; python_version >= "3.14"
+Requires-Dist: rich==14.3.4; python_version >= "3.14"
+Requires-Dist: tenacity==9.2.1; python_version >= "3.14"
+Requires-Dist: tomli-w==1.2.0; python_version >= "3.14"
+Requires-Dist: ruamel.yaml==0.18.16; python_version >= "3.14"
+Requires-Dist: ruamel.yaml.clib==0.2.15; python_version >= "3.14" and platform_python_implementation == "CPython" and (sys_platform == "darwin" or (sys_platform == "linux" and platform_machine in "x86_64 aarch64 i686") or (sys_platform == "win32" and platform_machine in "AMD64 x86"))
+Requires-Dist: requests==2.34.2; python_version >= "3.14"
+Requires-Dist: jinja2==3.1.6; python_version >= "3.14"
+Requires-Dist: firecrawl-anydoc==0.2.4; python_version >= "3.14"
+Requires-Dist: pydantic==2.14.1; python_version >= "3.14"
+Requires-Dist: prompt_toolkit==3.0.53; python_version >= "3.14"
+Requires-Dist: croniter==6.2.4; python_version >= "3.14"
+Requires-Dist: snowballstemmer==3.1.1; python_version >= "3.14"
+Requires-Dist: packaging==26.3; python_version >= "3.14"
+Requires-Dist: Markdown==3.11.2; python_version >= "3.14"
+Requires-Dist: PyJWT[crypto]==2.15.1; python_version >= "3.14"
+Requires-Dist: urllib3<3,>=2.8.0; python_version >= "3.14"
+Requires-Dist: cryptography==50.0.2; python_version >= "3.14"
+Requires-Dist: tzdata==2025.3; sys_platform == "win32" and python_version >= "3.14"
+Requires-Dist: psutil==7.2.2; sys_platform != "android" and python_version >= "3.14"
+Requires-Dist: psutil @ git+https://github.com/giampaolo/psutil.git@380bd2b59c67b0e1b04bbf3a90b11744f4f96644 ; sys_platform == "android" and python_version >= "3.14"
+Requires-Dist: websockets==15.0.1; python_version >= "3.14"
+Requires-Dist: browser-harness==0.1.13; python_version >= "3.14"
+Requires-Dist: pathspec==1.1.1; python_version >= "3.14"
+Requires-Dist: fastapi<1,>=0.104.0; python_version >= "3.14"
+Requires-Dist: uvicorn<1,>=0.31.0; python_version >= "3.14"
+Requires-Dist: httptools<0.9,>=0.6.3; python_version >= "3.14"
+Requires-Dist: watchfiles<2,>=0.20; python_version >= "3.14"
+Requires-Dist: python-multipart<1,>=0.0.9; python_version >= "3.14"
+Requires-Dist: ptyprocess<1,>=0.7.0; sys_platform != "win32" and python_version >= "3.14"
+Requires-Dist: pywinpty<4,>=3.0.5; sys_platform == "win32" and python_version >= "3.14"
+Requires-Dist: pywin32<312,>=306; sys_platform == "win32" and python_version >= "3.14"
+Requires-Dist: winrt-windows-applicationmodel<4,>=3.2.1; sys_platform == "win32" and python_version >= "3.14"
+Requires-Dist: winrt-windows-foundation<4,>=3.2.1; sys_platform == "win32" and python_version >= "3.14"
+Requires-Dist: winrt-windows-foundation-collections<4,>=3.2.1; sys_platform == "win32" and python_version >= "3.14"
+Requires-Dist: winrt-windows-services-store<4,>=3.2.1; sys_platform == "win32" and python_version >= "3.14"
+Requires-Dist: Pillow==13.0.0; python_version >= "3.14"
+Requires-Dist: pillow-heif<2,>=1.4.0; python_version >= "3.14"
+Requires-Dist: resvg-py==0.5.0; python_version >= "3.14"
+Requires-Dist: concurrent-log-handler==0.9.30; sys_platform == "win32" and python_version >= "3.14"
+Requires-Dist: nemo-relay<0.11,>=0.10; ((sys_platform == "darwin" and platform_machine == "arm64") or (sys_platform == "linux" and platform_machine == "x86_64" and "android" not in platform_release) or (sys_platform == "linux" and platform_machine == "aarch64" and "android" not in platform_release) or (sys_platform == "win32" and platform_machine == "AMD64") or (sys_platform == "win32" and platform_machine == "ARM64")) and python_version >= "3.14"
+Provides-Extra: uvloop
+Requires-Dist: uvloop<0.24,>=0.15.1; (sys_platform != "win32" and sys_platform != "cygwin" and sys_platform != "android" and platform_python_implementation != "PyPy") and extra == "uvloop"
+Provides-Extra: anthropic
+Requires-Dist: anthropic==0.125.0; extra == "anthropic"
+Provides-Extra: exa
+Requires-Dist: exa-py==2.26.0; extra == "exa"
+Provides-Extra: firecrawl
+Requires-Dist: firecrawl-py==4.53.2; extra == "firecrawl"
+Provides-Extra: parallel-web
+Requires-Dist: parallel-web==0.6.0; extra == "parallel-web"
+Provides-Extra: ddgs
+Requires-Dist: ddgs==9.16.0; extra == "ddgs"
+Provides-Extra: scrapy
+Requires-Dist: scrapy==2.19.0; extra == "scrapy"
+Provides-Extra: fal
+Requires-Dist: fal-client==0.14.1; extra == "fal"
+Provides-Extra: edge-tts
+Requires-Dist: edge-tts==7.3.1; extra == "edge-tts"
+Provides-Extra: neutts
+Requires-Dist: neutts[all]==1.4.1; python_version < "3.14" and extra == "neutts"
+Provides-Extra: kittentts
+Requires-Dist: kittentts @ https://github.com/KittenML/KittenTTS/releases/download/0.8.1/kittentts-0.8.1-py3-none-any.whl ; ((platform_machine != "ARM64" or sys_platform != "win32") and (platform_machine != "x86_64" or sys_platform != "darwin") and sys_platform != "android") and extra == "kittentts"
+Requires-Dist: misaki[en] @ git+https://github.com/NousResearch/misaki.git@f03fd2be7346952a83d3d4845c217fc7667f322d ; ((platform_machine != "ARM64" or sys_platform != "win32") and (platform_machine != "x86_64" or sys_platform != "darwin") and sys_platform != "android") and extra == "kittentts"
+Requires-Dist: soundfile==0.14.0; ((platform_machine != "ARM64" or sys_platform != "win32") and (platform_machine != "x86_64" or sys_platform != "darwin") and sys_platform != "android") and extra == "kittentts"
+Provides-Extra: piper
+Requires-Dist: piper-tts==1.8.0; ((platform_machine != "ARM64" or sys_platform != "win32") and (platform_machine != "x86_64" or sys_platform != "darwin") and sys_platform != "android") and extra == "piper"
+Provides-Extra: modal
+Requires-Dist: modal==1.6.2; extra == "modal"
+Provides-Extra: daytona
+Requires-Dist: daytona==0.225.0; extra == "daytona"
+Provides-Extra: vercel
+Requires-Dist: vercel==0.12.0; extra == "vercel"
+Provides-Extra: google-meet
+Requires-Dist: playwright==1.64.0; sys_platform != "android" and extra == "google-meet"
+Requires-Dist: websockets==15.0.1; sys_platform != "android" and extra == "google-meet"
+Provides-Extra: messaging
+Requires-Dist: python-telegram-bot[webhooks]==22.8; extra == "messaging"
+Requires-Dist: discord.py[voice]==2.7.1; extra == "messaging"
+Requires-Dist: aiohttp==3.14.5; extra == "messaging"
+Requires-Dist: brotlicffi==1.2.1.0; extra == "messaging"
+Requires-Dist: slack-bolt==1.30.0; extra == "messaging"
+Requires-Dist: slack-sdk==3.45.0; extra == "messaging"
+Requires-Dist: qrcode==7.4.2; extra == "messaging"
+Provides-Extra: cron
+Provides-Extra: slack
+Requires-Dist: slack-bolt==1.30.0; extra == "slack"
+Requires-Dist: slack-sdk==3.45.0; extra == "slack"
+Requires-Dist: aiohttp==3.14.5; extra == "slack"
+Provides-Extra: matrix
+Requires-Dist: mautrix[encryption]==0.21.1; sys_platform == "linux" and extra == "matrix"
+Requires-Dist: aiosqlite==0.22.1; sys_platform == "linux" and extra == "matrix"
+Requires-Dist: asyncpg==0.32.0; sys_platform == "linux" and extra == "matrix"
+Requires-Dist: aiohttp-socks==0.12.0; sys_platform == "linux" and extra == "matrix"
+Requires-Dist: aiohttp==3.14.5; sys_platform == "linux" and extra == "matrix"
+Provides-Extra: wecom
+Requires-Dist: defusedxml==0.7.1; extra == "wecom"
+Provides-Extra: keychain
+Requires-Dist: keyring==25.7.0; extra == "keychain"
+Provides-Extra: tts-premium
+Requires-Dist: elevenlabs==1.59.0; extra == "tts-premium"
+Provides-Extra: voice
+Requires-Dist: faster-whisper==1.2.1; ((platform_machine != "ARM64" or sys_platform != "win32") and (platform_machine != "x86_64" or platform_system != "Darwin") and sys_platform != "android") and extra == "voice"
+Requires-Dist: sounddevice==0.5.6; extra == "voice"
+Requires-Dist: numpy==2.5.4; extra == "voice"
+Provides-Extra: wake
+Requires-Dist: pyopen-wakeword==1.1.0; ((platform_machine != "ARM64" or sys_platform != "win32") and (platform_machine != "x86_64" or sys_platform != "darwin")) and extra == "wake"
+Requires-Dist: sherpa-onnx==1.13.8; extra == "wake"
+Requires-Dist: sherpa-onnx-core==1.13.8; extra == "wake"
+Requires-Dist: sentencepiece==0.2.2; extra == "wake"
+Requires-Dist: pypinyin==0.55.0; extra == "wake"
+Requires-Dist: pvporcupine==4.0.3; extra == "wake"
+Requires-Dist: sounddevice==0.5.6; extra == "wake"
+Requires-Dist: numpy==2.5.4; extra == "wake"
+Provides-Extra: telegram
+Requires-Dist: python-telegram-bot[webhooks]==22.8; extra == "telegram"
+Provides-Extra: discord
+Requires-Dist: discord.py[voice]==2.7.1; extra == "discord"
+Provides-Extra: stt-whisper
+Requires-Dist: faster-whisper==1.2.1; ((platform_machine != "ARM64" or sys_platform != "win32") and (platform_machine != "x86_64" or platform_system != "Darwin") and sys_platform != "android") and extra == "stt-whisper"
+Provides-Extra: audio-io
+Requires-Dist: sounddevice==0.5.6; extra == "audio-io"
+Requires-Dist: numpy==2.5.4; extra == "audio-io"
+Provides-Extra: silk
+Requires-Dist: pilk==0.2.4; extra == "silk"
+Provides-Extra: wake-openwakeword
+Requires-Dist: pyopen-wakeword==1.1.0; ((platform_machine != "ARM64" or sys_platform != "win32") and (platform_machine != "x86_64" or sys_platform != "darwin")) and extra == "wake-openwakeword"
+Provides-Extra: wake-sherpa
+Requires-Dist: sherpa-onnx==1.13.8; extra == "wake-sherpa"
+Requires-Dist: sherpa-onnx-core==1.13.8; extra == "wake-sherpa"
+Requires-Dist: sentencepiece==0.2.2; extra == "wake-sherpa"
+Requires-Dist: pypinyin==0.55.0; extra == "wake-sherpa"
+Provides-Extra: wake-porcupine
+Requires-Dist: pvporcupine==4.0.3; extra == "wake-porcupine"
+Provides-Extra: google-chat
+Requires-Dist: google-cloud-pubsub==2.43.0; (platform_machine != "ARM64" or sys_platform != "win32") and extra == "google-chat"
+Provides-Extra: doc-extract
+Requires-Dist: firecrawl-anydoc==0.2.4; extra == "doc-extract"
+Provides-Extra: documents
+Requires-Dist: python-docx==1.2.0; extra == "documents"
+Requires-Dist: openpyxl==3.1.5; extra == "documents"
+Requires-Dist: python-pptx==1.0.2; extra == "documents"
+Requires-Dist: reportlab==5.1.0; extra == "documents"
+Requires-Dist: pypdf==6.21.2; extra == "documents"
+Provides-Extra: documents-pdf
+Requires-Dist: pdfplumber==0.11.10; extra == "documents-pdf"
+Requires-Dist: pypdfium2==5.14.0; extra == "documents-pdf"
+Provides-Extra: trace-upload
+Requires-Dist: huggingface-hub==1.33.0; extra == "trace-upload"
+Provides-Extra: vision
+Provides-Extra: pty
+Provides-Extra: mcp
+Requires-Dist: mcp==2.3.0; extra == "mcp"
+Requires-Dist: httpx2==2.15.1; extra == "mcp"
+Requires-Dist: starlette==1.9.0; extra == "mcp"
+Provides-Extra: nemo-relay
+Provides-Extra: sms
+Requires-Dist: aiohttp==3.14.5; extra == "sms"
+Provides-Extra: teams
+Requires-Dist: microsoft-teams-apps==2.1.1; extra == "teams"
+Requires-Dist: aiohttp==3.14.5; extra == "teams"
+Provides-Extra: computer-use
+Requires-Dist: mcp==2.3.0; extra == "computer-use"
+Requires-Dist: httpx2==2.15.1; extra == "computer-use"
+Requires-Dist: starlette==1.9.0; extra == "computer-use"
+Provides-Extra: acp
+Requires-Dist: agent-client-protocol==0.9.0; extra == "acp"
+Provides-Extra: mistral
+Requires-Dist: mistralai==2.10.1; extra == "mistral"
+Provides-Extra: otlp
+Requires-Dist: opentelemetry-sdk==1.45.1; extra == "otlp"
+Requires-Dist: opentelemetry-exporter-otlp-proto-http==1.45.1; extra == "otlp"
+Provides-Extra: bedrock
+Requires-Dist: boto3==1.43.115; extra == "bedrock"
+Provides-Extra: vertex
+Requires-Dist: google-auth==2.62.0; extra == "vertex"
+Provides-Extra: azure-identity
+Requires-Dist: azure-identity==1.26.0; extra == "azure-identity"
+Provides-Extra: termux
+Requires-Dist: python-telegram-bot[webhooks]==22.8; extra == "termux"
+Requires-Dist: nova-agent[cron]; extra == "termux"
+Requires-Dist: nova-agent[mcp]; extra == "termux"
+Requires-Dist: nova-agent[acp]; extra == "termux"
+Provides-Extra: termux-all
+Requires-Dist: nova-agent[termux]; extra == "termux-all"
+Requires-Dist: nova-agent[google]; extra == "termux-all"
+Requires-Dist: nova-agent[sms]; extra == "termux-all"
+Requires-Dist: nova-agent[web]; extra == "termux-all"
+Requires-Dist: nova-agent[pty]; extra == "termux-all"
+Provides-Extra: dingtalk
+Requires-Dist: dingtalk-stream==0.24.3; extra == "dingtalk"
+Requires-Dist: alibabacloud-dingtalk==2.2.65; extra == "dingtalk"
+Requires-Dist: qrcode==7.4.2; extra == "dingtalk"
+Provides-Extra: feishu
+Requires-Dist: lark-oapi==1.7.5; extra == "feishu"
+Requires-Dist: qrcode==7.4.2; extra == "feishu"
+Provides-Extra: google
+Requires-Dist: google-api-python-client==2.201.0; extra == "google"
+Requires-Dist: google-auth==2.62.0; extra == "google"
+Requires-Dist: google-auth-oauthlib==1.5.0; extra == "google"
+Requires-Dist: google-auth-httplib2==0.4.4; extra == "google"
+Requires-Dist: httplib2==0.32.0; extra == "google"
+Requires-Dist: pyasn1==0.6.4; extra == "google"
+Provides-Extra: youtube
+Requires-Dist: youtube-transcript-api==1.2.4; extra == "youtube"
+Provides-Extra: web
+Requires-Dist: fastapi==0.133.1; extra == "web"
+Requires-Dist: uvicorn==0.54.0; extra == "web"
+Requires-Dist: starlette==1.9.0; extra == "web"
+Requires-Dist: python-multipart==0.0.32; extra == "web"
+Provides-Extra: all
+Requires-Dist: nova-agent[cron]; extra == "all"
+Requires-Dist: nova-agent[pty]; extra == "all"
+Requires-Dist: nova-agent[mcp]; extra == "all"
+Requires-Dist: nova-agent[uvloop]; extra == "all"
+Requires-Dist: nova-agent[sms]; extra == "all"
+Requires-Dist: nova-agent[acp]; extra == "all"
+Requires-Dist: nova-agent[google]; extra == "all"
+Requires-Dist: nova-agent[web]; extra == "all"
+Requires-Dist: nova-agent[youtube]; extra == "all"
+Dynamic: license-file
+
+# Nova Agent
+
+Nova Agent is an open-source AI agent that helps users accomplish tasks through a terminal interface, messaging gateways, tools, skills, and persistent memory. It supports multiple model providers, a rich toolset, scheduled automations, and a closed learning loop that creates and improves skills from experience.
+
+This repository is the official source for Nova Agent and uses GitHub for distribution, releases, and updates.
+
+## Table of Contents
+
+- [Features](#features)
+- [Supported Operating Systems](#supported-operating-systems)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Uninstall](#uninstall)
+- [Automatic Updates](#automatic-updates)
+- [Release Notes](#release-notes)
+- [Project Structure](#project-structure)
+- [Troubleshooting](#troubleshooting)
+- [Security and Privacy](#security-and-privacy)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Features
+
+- Interactive terminal UI with streaming tool output.
+- Messaging gateway support for Telegram, Discord, Slack, WhatsApp, Signal, and more.
+- Persistent, agent-curated memory and user profiles.
+- Autonomous skill creation and self-improvement during use.
+- Scheduled cron jobs with delivery to any platform.
+- Delegation to isolated subagents for parallel workstreams.
+- Multiple terminal backends (local, Docker, SSH, and others).
+- Model provider flexibility: choose any supported provider without code changes.
+- Full-text session search for cross-session recall.
+- MCP integration for connecting external tool servers.
+- Plugin and skills ecosystem.
+
+## Supported Operating Systems
+
+- Linux
+- macOS
+- Windows (native and WSL2)
+
+## Requirements
+
+- Python 3.11 or newer (3.14 recommended).
+- Git.
+- Node.js and npm (for web and desktop components).
+- Network access for model providers and GitHub update checks.
+
+## Installation
+
+### Option A: One-Line Installation (Recommended — npm)
+
+The easiest way to install Nova Agent is via the npm package:
+
+```bash
+npx @the-sanjeevkumar/nova-agent
+```
+
+This command:
+1. Downloads the latest release package from GitHub Releases (or the npm registry)
+2. Installs Nova Agent to `~/.nova/`
+3. Adds the `nova` launcher to your PATH
+4. Runs the first-time setup wizard automatically
+
+**Requirements:** Node.js 18+ and npm (comes with Node.js)
+
+> **Note:** This package is published to GitHub Packages, which needs GitHub authentication. If `npx` fails with a 401/404, add this to your `~/.npmrc` (create the token at github.com → Settings → Developer settings → Personal access tokens, with the `read:packages` scope):
+>
+> ```
+> @the-sanjeevkumar:registry=https://npm.pkg.github.com
+> //npm.pkg.github.com/:_authToken=YOUR_PAT_TOKEN
+> ```
+>
+> Prefer no setup at all? Use the curl installer below — it falls back to plain GitHub Releases downloads.
+
+---
+
+### Option B: One-Line Installation (curl)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/the-sanjeevkumar/nova-agent/main/install.sh | bash
+```
+
+This installer tries npm first, then falls back to downloading the latest release tarball from GitHub Releases. It detects your operating system, prepares the runtime, and installs the `nova` launcher.
+
+**Requirements:** git, curl, Node.js 18+ and npm (the script checks these before installing). Your existing configuration in `~/.nova` (or `$NOVA_HOME`) is preserved.
+
+---
+
+### Option C: Docker
+
+Build and run using the provided `Dockerfile`:
+```
+
+Build and run using the provided `Dockerfile`:
+
+```bash
+docker build -t nova-agent .
+docker run -it --rm -v "$HOME/.nova:/root/.nova" nova-agent
+```
+
+Persist configuration and memory by mounting your Nova home directory. Do not embed secrets in the image.
+
+---
+
+### Option D: GitHub Releases
+
+Download the latest stable release from:
+
+https://github.com/the-sanjeevkumar/nova-agent/releases/latest
+
+Select the appropriate package for your platform (v1.0.0+), verify its SHA-256 checksum, and extract to `~/.nova/`.
+
+---
+
+### Option E: Install from Source
+
+```bash
+git clone https://github.com/the-sanjeevkumar/nova-agent.git
+cd nova-agent
+python -m pip install -e .
+```
+
+If you use `uv`, you may install dependencies with your preferred workflow. The project uses `pyproject.toml` for dependency management.
+
+---
+
+### Installation Comparison
+
+| Method | Recommended For | Requirements |
+|---|---|---|
+| **npm (npx)** | **Most users** | Node.js 18+ |
+| curl installer | No npm registry access (tries npm, falls back to GitHub Releases) | git, curl, Node.js 18+, npm |
+| Docker | Isolated installations | Docker |
+| GitHub Releases | Manual installation | Compatible package |
+| Source installation | Developers | Git and Python runtime |
+
+## Configuration
+
+Nova Agent stores configuration and state in the Nova home directory (`~/.nova` by default, or `$NOVA_HOME`).
+
+On first run, Nova starts in **setup mode automatically** — the setup wizard walks you through connecting a provider, picking a model, and configuring your preferences, and exits itself once complete. Subsequent starts go straight to the interactive agent. You can rerun it any time with `nova setup`.
+
+Common locations:
+
+- Configuration: `~/.nova/config.yaml`
+- Environment variables: `~/.nova/.env`
+- Memory and sessions: `~/.nova/`
+
+Example environment configuration (use placeholders, never real keys):
+
+```bash
+OPENAI_API_KEY=your-api-key-here
+# or configure any other supported provider
+```
+
+Run the setup wizard:
+
+```bash
+nova setup
+```
+
+Or configure a model directly:
+
+```bash
+nova model
+```
+
+## Usage
+
+Start Nova Agent:
+
+```bash
+nova
+```
+
+Common commands:
+
+```bash
+nova model        # Choose provider and model
+nova tools        # Configure enabled tools
+nova config set   # Set a config value
+nova config get   # Read a config value
+nova gateway      # Start messaging gateway
+nova setup        # Full setup wizard
+nova update       # Update to latest version
+nova doctor       # Diagnose issues
+```
+
+## Automatic Updates
+
+Nova Agent checks GitHub for new stable releases and notifies you when an update is available.
+
+- Version comparison uses semantic versioning and is not alphabetical.
+- Checks run on startup in the background and do not block the application.
+- Network failures are handled gracefully.
+- Repeated notifications for the same release are suppressed.
+- Manual check: `nova update` or `nova update --check`.
+- Disable automatic checks in configuration if desired.
+- Updates are never forced; your permission is required.
+
+When an update is available, a notification displays the installed version, latest version, and release notes, with options to update now, later, or view release notes.
+
+### Update Methods
+
+**npm-based installation (recommended):**
+```bash
+npx @the-sanjeevkumar/nova-agent
+```
+This re-downloads the latest installer which replaces your binary with the latest version.
+
+**CLI-based installation:**
+```bash
+nova update
+```
+This uses the built-in updater to check GitHub Releases and replace the binary.
+
+**Legacy curl installation:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/the-sanjeevkumar/nova-agent/main/install.sh -o update.sh
+bash update.sh
+```
+
+User configuration, memory, and local data are preserved during updates.
+
+## Uninstall
+
+Run the uninstaller:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/the-sanjeevkumar/nova-agent/main/uninstall.sh | bash
+```
+
+It offers two options:
+
+1. **Temp Uninstall** — removes the Nova code and launchers only; your config, secrets, sessions and logs in `~/.nova` are kept (so a reinstall picks up where you left off).
+2. **Complete Uninstall** — removes everything, including all data. You will be asked to type `yes` to confirm.
+
+## Release Notes
+
+Release notes are maintained on GitHub:
+
+https://github.com/the-sanjeevkumar/nova-agent/releases
+
+Each release documents new features, improvements, bug fixes, performance changes, and breaking changes. See `CHANGELOG.md` for a local summary.
+
+## Project Structure
+
+```text
+nova-agent/
+├── README.md
+├── CHANGELOG.md
+├── LICENSE
+├── pyproject.toml
+├── package.json
+├── Dockerfile
+├── install.sh
+├── nova_cli/
+├── agent/
+├── gateway/
+├── tools/
+├── tests/
+└── .github/
+    └── workflows/
+```
+
+## Troubleshooting
+
+- **Runtime version errors**: ensure Python 3.11+ is installed.
+- **Missing dependencies**: run `nova doctor`.
+- **API key issues**: verify `~/.nova/.env`.
+- **GitHub rate limits**: set `GITHUB_TOKEN` for higher limits (optional).
+- **Update failures**: rerun the installer; your data is preserved.
+- **Docker issues**: ensure volumes mount `~/.nova`.
+
+## Security and Privacy
+
+- Configuration and memory are stored locally in your Nova home directory.
+- Credentials are read from environment/config and are never committed.
+- Updates are downloaded from GitHub and verified where checksums are provided.
+- Optional network features can be disabled in configuration.
+- Nova Agent sends data to model providers you configure; local models are supported by some providers.
+
+## Contributing
+
+Contributions are welcome.
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Install development dependencies.
+4. Run tests.
+5. Submit a pull request.
+
+See `CONTRIBUTING.md` for details.
+
+## License
+
+This project is licensed under the MIT License. See `LICENSE`.
+

@@ -1,0 +1,4 @@
+[console_scripts]
+nova = nova_cli.main:main
+nova-acp = acp_adapter.entry:main
+nova-agent = agent.legacy_cli:main

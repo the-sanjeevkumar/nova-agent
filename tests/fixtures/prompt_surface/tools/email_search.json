@@ -1,0 +1,34 @@
+{
+  "description": "Search the configured mailbox: server-side IMAP filter, headers newest-first. For this profile's own email account (the EMAIL_* secrets). Returns UID, sender name/address, subject, date, read state; no message bodies are downloaded. Follow with email_read using a returned UID.",
+  "name": "email_search",
+  "parameters": {
+    "properties": {
+      "folder": {
+        "description": "Folder to search (default INBOX). Run email_folders for valid names.",
+        "type": "string"
+      },
+      "limit": {
+        "description": "Max messages to return (newest first). Default 20, max 50.",
+        "type": "integer"
+      },
+      "sender": {
+        "description": "Match the From header against this substring.",
+        "type": "string"
+      },
+      "since": {
+        "description": "Received since: YYYY-MM-DD, or Nd meaning N days back (e.g. 7d).",
+        "type": "string"
+      },
+      "subject": {
+        "description": "Match the Subject header against this substring.",
+        "type": "string"
+      },
+      "unread_only": {
+        "description": "Only messages not yet read (UNSEEN). Default false.",
+        "type": "boolean"
+      }
+    },
+    "required": [],
+    "type": "object"
+  }
+}

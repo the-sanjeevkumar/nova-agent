@@ -1,0 +1,52 @@
+{
+  "description": "Compose and send one outgoing email from the configured mailbox. From is the profile's own EMAIL_ADDRESS with no draft step, so use deliberately. Plain-text body plus optional CC/BCC and local file attachments; reply_to_message_id threads a reply to a message you read.",
+  "name": "email_send",
+  "parameters": {
+    "properties": {
+      "attachments": {
+        "description": "Local file paths to attach; missing paths are skipped and reported.",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "bcc": {
+        "description": "BCC address(es), comma-separated; added in the SMTP envelope without a visible header.",
+        "type": "string"
+      },
+      "body": {
+        "description": "Plain-text body (no markdown).",
+        "type": "string"
+      },
+      "cc": {
+        "description": "CC address(es), comma-separated.",
+        "type": "string"
+      },
+      "reply_to_message_id": {
+        "description": "Message-ID of the mail being replied to; sets In-Reply-To/References threading.",
+        "type": "string"
+      },
+      "save_to_sent": {
+        "description": "Copy the message into the sent folder server-side (folder names differ; failures are reported).",
+        "type": "boolean"
+      },
+      "sent_folder": {
+        "description": "Folder used when save_to_sent is true (default Sent).",
+        "type": "string"
+      },
+      "subject": {
+        "description": "Subject line; empty sends a subject-less mail.",
+        "type": "string"
+      },
+      "to": {
+        "description": "Recipient address(es), comma-separated for several.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "to",
+      "body"
+    ],
+    "type": "object"
+  }
+}
