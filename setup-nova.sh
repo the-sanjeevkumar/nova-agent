@@ -217,7 +217,7 @@ bin_dir="$HOME/.local/bin"
 if [ "$os" = win32 ]; then
     bin_dir="$(cygpath -am "${NOVA_HOME:-${LOCALAPPDATA:-$HOME/AppData/Local}/nova}/bin")"
 fi
-if ! "$boot_py" -I -X utf8 nova_cli/_launchers.py "$bin_dir"; then
+if ! "$boot_py" -I -X utf8 -c "import sys; sys.path.insert(0, '.'); from pathlib import Path; from nova_cli._launchers import ensure_install_launchers; import os; d=Path(os.path.expanduser('~/.local/bin')); d.mkdir(parents=True, exist_ok=True); r=ensure_install_launchers(Path('.'), d); print('published', len(r)) if len(r)==2 else (print('launcher publication failed', file=__import__('sys').stderr) or __import__('sys').exit(1))"; then
     echo -e "${RED}✗${NC} launcher publication failed" >&2
     exit 1
 fi

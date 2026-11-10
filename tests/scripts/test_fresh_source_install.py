@@ -68,7 +68,7 @@ def test_current_installer_publishes_real_dependencies_and_warm_path(tmp_path, s
     for name in ("pm", "nova_cli", "nova_platform"):
         shutil.copytree(ROOT / name, source / name, ignore=shutil.ignore_patterns("__pycache__"))
     for name in ("utils.py", "nova_constants.py", "nova_dir_acl.py", "nova_yaml.py", "nova_bootstrap.py",
-                 "setup-hermes.sh"):
+                 "setup-nova.sh"):
         shutil.copy2(ROOT / name, source / name)
     # The CLI's user-facing text resolves through the i18n kernel (agent.i18n + the English catalog),
     # its config/env layer consults the stdlib-only safe-worker policy, and the update path's wait
@@ -134,7 +134,7 @@ def test_current_installer_publishes_real_dependencies_and_warm_path(tmp_path, s
     assert not npm_called.exists()
     if fault:
         assert not (install / ".hermes-bootstrap-complete").exists()
-        assert not (home / ".local/bin/hermes").exists()
+        assert not (home / ".local/bin/nova").exists()
         for facts in (home / ".hermes/installs").glob("*/facts.json"):
             assert "venv" not in json.loads(facts.read_text())["packages"]
         assert '"stage":"python-deps"' in result.stdout
@@ -143,14 +143,14 @@ def test_current_installer_publishes_real_dependencies_and_warm_path(tmp_path, s
     assert json.loads((install / ".hermes-bootstrap-complete").read_text())["pinnedCommit"] == commit
     facts = next((home / ".hermes/installs").glob("*/facts.json"))
     selection = json.loads(facts.read_text())["packages"]["venv"]
-    launcher = home / ".local/bin/hermes"
+    launcher = home / ".local/bin/nova"
     child = json.loads(run([str(launcher), "from elsewhere"]).stdout)
     assert child["argv"] == ["from elsewhere"]
     assert Path(child["module"]).is_relative_to(Path(selection["environment"]))
     assert not (install / "venv").exists()
     # The developer setup path publishes through the same writer after real PM.
     launcher.unlink()
-    run(["bash", str(install / "setup-hermes.sh")])
+    run(["bash", str(install / "setup-nova.sh")])
     assert json.loads(run([str(launcher), "from setup"]).stdout)["argv"] == ["from setup"]
     # Warm path publication must work with all acquisition inputs unavailable.
     shutil.rmtree(docroot)

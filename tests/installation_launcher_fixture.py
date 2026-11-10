@@ -21,7 +21,7 @@ def publish_fixture_launcher(root: Path, main_source: str) -> Path:
         shutil.copyfile(repository / relative, root / relative)
     out = root / ".hermes" / "bin"
     out.mkdir(parents=True)
-    launcher = mint_launcher("hermes", root, out, Path(sys.executable), None)
+    launcher = mint_launcher("nova", root, out, Path(sys.executable), None)
     assert launcher is not None
     assert not (root / "venv").exists()
     return launcher

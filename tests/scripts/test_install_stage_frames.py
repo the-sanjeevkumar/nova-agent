@@ -96,4 +96,4 @@ bash -c 'printf "%s\\n" "$HERMES_HOME"'
                               cwd=tmp_path, env=env, capture_output=True,
                               text=True, encoding="utf-8", timeout=30, check=False)
     assert resolved.returncode == 0, resolved.stderr
-    assert resolved.stdout.splitlines() == [(home / "hermes-agent").as_posix(), home.as_posix()]
+    assert resolved.stdout.splitlines() == [(home / "nova-agent").as_posix(), home.as_posix()]
