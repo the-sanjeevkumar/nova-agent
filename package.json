@@ -1,6 +1,6 @@
 {
   "name": "@the-sanjeevkumar/nova-agent",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Nova Agent - a universal AI agent you can run from any terminal. Installs a self-contained Python environment on first run.",
   "license": "MIT",
   "author": "Sanjeev Kumar",
