@@ -27,6 +27,6 @@ fi
 _here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=scripts/_activation.sh
 . "$_here/_activation.sh"
-hermes_ensure_env "$(dirname "$_here")" || exit 1
+nova_ensure_env "$(dirname "$_here")" || exit 1
 
 exec "$@"

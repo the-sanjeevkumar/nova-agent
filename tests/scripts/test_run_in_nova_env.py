@@ -74,7 +74,7 @@ def checkout(tmp_path: Path) -> Path:
     _shim(root / "shim" / "python3")
     _shim(root / ".venv" / "bin" / "python")  # the bootstrap interpreter that reads the pm env
 
-    (root / "setup-hermes.sh").write_text(
+    (root / "setup-nova.sh").write_text(
         "echo SYNCED >&2\n"
         f'test ! -e "{posix(root)}/fail"\n', encoding="utf-8",
     )
@@ -82,7 +82,7 @@ def checkout(tmp_path: Path) -> Path:
     (root / "pm" / "environments.py").write_text(
         "import sys\n"
         "assert sys.argv[1:] == ['--format', 'sh'], sys.argv\n"
-        f"print(\"export __HERMES_ACTIVATED='{posix(root)}/state/facts.json'\")\n"
+        f"print(\"export __NOVA_ACTIVATED='{posix(root)}/state/facts.json'\")\n"
         f"print('export PATH=\"{posix(root)}/shim:$PATH\"')\n",
         encoding="utf-8",
     )
@@ -98,9 +98,9 @@ def _record(root: Path, *, test_environment: bool = True) -> None:
 def _run_in(root: Path, *command: str, sentinel: str | None = "{root}/state/facts.json"):
     """Drive the runner as a caller would; the shim dir is on PATH like any tool dir."""
     env = {**os.environ, "PATH": f"{posix(root / 'shim')}{os.pathsep}{os.environ.get('PATH', '')}"}
-    env.pop("__HERMES_ACTIVATED", None)
+    env.pop("__NOVA_ACTIVATED", None)
     if sentinel is not None:
-        env["__HERMES_ACTIVATED"] = sentinel.replace("{root}", posix(root))
+        env["__NOVA_ACTIVATED"] = sentinel.replace("{root}", posix(root))
     return subprocess.run(
         [bash(), posix(root / "scripts" / RUNNER.name), *command],
         capture_output=True, text=True, cwd=posix(root), env=env, timeout=60,
@@ -160,7 +160,7 @@ def test_unusable_sentinel_syncs(checkout: Path, sentinel: str | None):
 
 
 def test_command_runs_in_the_environment_with_its_arguments_and_exit_status(checkout: Path):
-    run = _run_in(checkout, "bash", "-c", 'echo "$__HERMES_ACTIVATED|$0|$1|$2"; exit 7', "zero", "b c", "d",
+    run = _run_in(checkout, "bash", "-c", 'echo "$__NOVA_ACTIVATED|$0|$1|$2"; exit 7', "zero", "b c", "d",
                   sentinel=None)
     assert run.returncode == 7, run.stderr
     assert run.stdout.strip() == f"{posix(checkout)}/state/facts.json|zero|b c|d"

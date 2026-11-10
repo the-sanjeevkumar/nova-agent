@@ -101,11 +101,11 @@ if _shared="$(_account_tool_store)"; then
   echo "▶ faked HOME: using the account's tool store $HERMES_RUNTIME_DIR"
 fi
 unset _account _shared
-if [ -z "${__HERMES_ACTIVATED:-}" ] && _has_pytest "${HERMES_PYTHON:-}"; then
+if [ -z "${__NOVA_ACTIVATED:-}" ] && _has_pytest "${HERMES_PYTHON:-}"; then
   PYTHON="$HERMES_PYTHON"
   echo "▶ not activated — using HERMES_PYTHON: $PYTHON"
 else
-  if ! hermes_activation_current "$REPO_ROOT"; then
+  if ! nova_activation_current "$REPO_ROOT"; then
     if [ -n "${__HERMES_TESTS_REEXEC:-}" ]; then
       echo "error: run-in-hermes-env did not produce a current environment for $REPO_ROOT" >&2
       exit 1
@@ -114,9 +114,9 @@ else
     export __HERMES_TESTS_REEXEC=1
     exec "$SCRIPT_DIR/run-in-hermes-env" "$BASH" "${BASH_SOURCE[0]}" "$@"
   fi
-  PYTHON="${__HERMES_TEST_PYTHON:-}"
+  PYTHON="${__NOVA_TEST_PYTHON:-}"
   if ! _has_pytest "$PYTHON"; then
-    echo "error: activation provided no test interpreter with pytest (__HERMES_TEST_PYTHON=${PYTHON:-unset})" >&2
+    echo "error: activation provided no test interpreter with pytest (__NOVA_TEST_PYTHON=${PYTHON:-unset})" >&2
     exit 1
   fi
 fi

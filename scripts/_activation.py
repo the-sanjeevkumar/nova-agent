@@ -33,7 +33,9 @@ from __future__ import annotations
 import os
 import sys
 
-ACTIVATION_ENV_VAR = "__HERMES_ACTIVATED"
+# PM composes this sentinel (pm/environments.py); scripts/_activation.sh's
+# nova_activation_current reads it. Watch the compose side when renaming.
+ACTIVATION_ENV_VAR = "__NOVA_ACTIVATED"
 POSIX_COMMAND = "source ./activate"
 WINDOWS_COMMAND = ". .\\activate.ps1"
 

@@ -139,12 +139,24 @@ def record_activation_inputs(stamps: Path, mtimes: dict[str, int], project_root:
     stamps.mkdir(parents=True, exist_ok=True)
     (stamps / ".project-root").write_text(str(Path(project_root).resolve()), encoding="utf-8")
     if test_environment:
-        (stamps / ".test-environment").touch()
-    for name, mtime in mtimes.items():
-        stamp = stamps / name
-        stamp.parent.mkdir(parents=True, exist_ok=True)
-        stamp.touch()
-        os.utime(stamp, ns=(mtime, mtime))
+        # The reader (scripts/_activation.sh::nova_activation_current) compares the
+        # file's CONTENT against the flag it composes (default "--test-environment").
+        # An empty touch() read as "" and falsified every post-sync activation check,
+        # so run-in-nova-env always reported "did not produce a current environment".
+        (stamps / ".test-environment").write_text("--test-environment\n", encoding="utf-8")
+    manifest = stamps / "inputs"
+    with open(manifest, "wb") as f:
+        # The same reader's mtime loop ports "<input=stamp>\0" pairs from this
+        # manifest and judges staleness pairwise (`-nt`/`-ot`); the per-input
+        # stamp files alone give it nothing to read, and the check then fails
+        # on the missing file (bash reports line 88: inputs: No such file).
+        for name, mtime in mtimes.items():
+            stamp = stamps / name
+            stamp.parent.mkdir(parents=True, exist_ok=True)
+            stamp.touch()
+            os.utime(stamp, ns=(mtime, mtime))
+            input_path = Path(project_root) / name
+            f.write(f"{input_path}={stamp}\0".encode())
 
 
 def _payload_manifest(root: Path) -> tuple[dict, Path] | None:

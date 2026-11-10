@@ -67,7 +67,15 @@ dependencies = [
   # arrangement dated to the package's uv exclude-newer quarantine, which
   # has long expired). PM's doc-extract extra repairs lean/broken installs
   # from this same dependency declaration.
-  "firecrawl-anydoc==0.2.4; python_version >= '3.14'",
+  # The `sys_platform != 'android'` clause (same shape as psutil's split
+  # and nemo-relay's wheel-target guard) keeps the Android/Bionic python
+  # out: PyPI ships no bionic wheels for anydoc, so a faithful marker-less
+  # pin sends the phone's pip into an sdist build that bricks the whole
+  # npm/curl setup run (#Termux: "failed to build firecrawl-anydoc").
+  # `tools/read_extract.py` degrades to the typed NeedsOcrError teaching
+  # error without it; the Termux deb wheelhouse builds natives itself and
+  # is unaffected by marker evaluation on the build container.
+  "firecrawl-anydoc==0.2.4; python_version >= '3.14' and sys_platform != 'android'",
   # Bumped from 2.12.5 to 2.13.4 to pull in pydantic-core 2.46.4.
   # pydantic-core 2.41.5 (pulled by 2.12.5) segfaults when the OpenAI SDK's
   # Responses API resource is exercised from a non-main thread, which is the
@@ -373,7 +381,7 @@ google-chat = [
 # Document extraction (read_file anydoc converter self-heal) — core already
 # bundles firecrawl-anydoc==0.2.4; the extra exists so a lean/broken install
 # can re-sync exactly the pin from core.
-doc-extract = ["firecrawl-anydoc==0.2.4"]
+doc-extract = ["firecrawl-anydoc==0.2.4; python_version >= '3.14' and sys_platform != 'android'"]
 # Office/PDF authoring libraries for skills/productivity/{docx,xlsx,powerpoint,pdf}.
 # Baked into the Docker image (Dockerfile `--extra documents`), whose sealed
 # venv has no pip and whose root fs resets on restart; ~25 MB there. Not in
@@ -611,6 +619,13 @@ matrix = "sys_platform == 'linux'"
 google-chat = "platform_machine != 'ARM64' or sys_platform != 'win32'"
 # Match the engine dependency markers so PM refuses an unsupported install.
 wake-openwakeword = "(platform_machine != 'ARM64' or sys_platform != 'win32') and (platform_machine != 'x86_64' or sys_platform != 'darwin')"
+# wake-openwakeword = "(platform_machine != 'ARM64' or sys_platform != 'win32') and (platform_machine != 'x86_64' or sys_platform != 'darwin')"
+# doc-extract: marker must equal its dependency marker — the gates contract
+# (tests/pm/test_extras.py::test_declared_extra_gates_match_dependency_selection)
+# compares gate vs dep-marker admission per platform, and ensure_import must
+# refuse cleanly on the bionic python instead of resolving the extra to an
+# empty set in a loop.
+doc-extract = "python_version >= '3.14' and sys_platform != 'android'"
 # faster-whisper's closure is prebuilt-only: ctranslate2 has no win_arm64 wheel and onnxruntime
 # none for darwin-x64. Its ANCHOR is faster_whisper, so an unsupported machine could install the
 # extra, rebuild the whole dependency environment and still fail the anchor on every retry.
