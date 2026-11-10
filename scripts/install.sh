@@ -20,7 +20,9 @@ node_major() {
 
 install_node() {
   echo "Node.js >= ${MIN_NODE_MAJOR} not found. Installing Node..."
-  if have apt-get; then
+  if [ -n "${TERMUX_VERSION:-}" ] || [[ "${PREFIX:-}" == *com.termux* ]]; then
+    pkg install -y nodejs
+  elif have apt-get; then
     sudo apt-get update
     sudo apt-get install -y curl
     curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
@@ -51,6 +53,20 @@ fi
 
 echo "Installing Nova Agent via npm..."
 npm install -g "$NOVA_NPM_PACKAGE"
+
+# Mirror npm/nova.js: the published package pins every runtime dependency to
+# Python >= 3.14, so warn before `nova` fails on its first import.
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "⚠ Python 3.14+ is required on first run."
+  echo "  Install it (Termux: pkg install python, else https://www.python.org/downloads/), then run: nova"
+else
+  py_ver="$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' 2>/dev/null || echo 0)"
+  py_major="${py_ver%%.*}"; py_minor="${py_ver#*.}"
+  if [ "$py_major" -lt 3 ] || { [ "$py_major" -eq 3 ] && [ "$py_minor" -lt 14 ]; }; then
+    echo "⚠ Found Python $py_ver but Nova Agent needs >= 3.14 (its dependencies only install on 3.14)."
+    echo "  Upgrade Python first, then run: nova"
+  fi
+fi
 
 echo ""
 echo "✅ Nova Agent installed."

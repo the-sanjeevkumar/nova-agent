@@ -19,6 +19,14 @@ const APP_ROOT = resolve(__dirname, '..');
 const NOVA_HOME = process.env.NOVA_HOME || join(homedir(), '.nova');
 const VENV_DIR = join(NOVA_HOME, 'venv');
 const IS_WIN = platform() === 'win32';
+// Termux reports process.platform === 'android'; $PREFIX distinguishes it from
+// other Android Pythons. The Python floor below must match pyproject.toml:
+// every runtime dependency is pinned with `python_version >= '3.14'`, so a
+// venv built on older Python installs the package with no dependencies and
+// `nova` dies on the first import (seen on Termux, which ships 3.12/3.13).
+const IS_TERMUX = platform() === 'android' || (process.env.PREFIX || '').includes('com.termux');
+const MIN_PY_MAJOR = 3;
+const MIN_PY_MINOR = 14;
 
 const VERSION = readVersion();
 
@@ -30,6 +38,16 @@ function readVersion() {
   }
 }
 
+function pythonTooOldError() {
+  console.error(`Nova Agent requires Python ${MIN_PY_MAJOR}.${MIN_PY_MINOR} or newer.`);
+  if (IS_TERMUX) {
+    console.error('Termux: run `pkg update && pkg install python`, then re-run `nova`.');
+  } else {
+    console.error('Install Python from https://www.python.org/downloads/ and re-run `nova`.');
+  }
+  process.exit(1);
+}
+
 function findPython() {
   const candidates = IS_WIN ? ['python', 'python3', 'py'] : ['python3', 'python'];
   for (const c of candidates) {
@@ -39,11 +57,11 @@ function findPython() {
     const m = (r.stdout + r.stderr).match(/Python (\d+)\.(\d+)\.(\d+)/);
     if (!m) continue;
     const [major, minor] = [parseInt(m[1]), parseInt(m[2])];
-    if (major > 3 || (major === 3 && minor >= 11)) {
+    if (major > MIN_PY_MAJOR || (major === MIN_PY_MAJOR && minor >= MIN_PY_MINOR)) {
       return c === 'py' ? { cmd: 'py', prefix: ['-3'] } : { cmd: c, prefix: [] };
     }
   }
-  return null;
+  pythonTooOldError();
 }
 
 function venvPython() {
@@ -67,11 +85,17 @@ function markerPath() {
   return join(VENV_DIR, '.nova-version');
 }
 
-function needsProvision() {
+function provisionMarker(py) {
+  // Two lines: launcher VERSION, then the venv's Python major.minor. A marker
+  // without the Python line (pre-1.0.2 installs) forces re-provision, so venvs
+  // built under older Python are not silently reused.
+  return `${VERSION}\n${py ? `${py.major}.${py.minor}` : 'unknown'}\n`;
+}
+
+function needsProvision(py) {
   if (!existsSync(venvPython()) || !existsSync(venvNova())) return true;
   try {
-    const installed = readFileSync(markerPath(), 'utf8').trim();
-    return installed !== VERSION;
+    return readFileSync(markerPath(), 'utf8') !== provisionMarker(py);
   } catch {
     return true;
   }
@@ -79,11 +103,6 @@ function needsProvision() {
 
 function provision() {
   const py = findPython();
-  if (!py) {
-    console.error('Nova Agent requires Python 3.11 or newer.');
-    console.error('Install Python from https://www.python.org/downloads/ and re-run `nova`.');
-    process.exit(1);
-  }
 
   mkdirSync(NOVA_HOME, { recursive: true });
 
@@ -105,15 +124,18 @@ function provision() {
   const install = runSync(venvPython(), ['-m', 'pip', 'install', '--quiet', APP_ROOT]);
   if (install !== 0) {
     console.error('Nova Agent installation failed.');
+    console.error('pip printed the failure above. If you are on Termux, PyPI wheels for');
+    console.error('pydantic-core/psutil do not target Android/Bionic libc; use the Nova');
+    console.error('Termux deb package (or a PM wheelhouse) instead of the npm launcher.');
     process.exit(install);
   }
 
-  writeFileSync(markerPath(), VERSION + '\n');
+  writeFileSync(markerPath(), provisionMarker(py));
   console.log('✅ Nova Agent ready.\n');
 }
 
 function main() {
-  if (needsProvision()) {
+  if (needsProvision(findPython())) {
     provision();
   }
 
