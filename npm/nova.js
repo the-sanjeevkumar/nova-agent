@@ -48,6 +48,54 @@ function pythonTooOldError() {
   process.exit(1);
 }
 
+function bionicStop(py) {
+  // The Python pyproject resolves against is a Bionic (Android libc) build:
+  // SOABI embeds the androideabi triple. PyPI publishes no Bionic wheels for
+  // Nova's native dependencies, so pip/uv can only fall back to sdist builds
+  // (Rust via maturin: "Target triple not supported by rustup:
+  // arm-unknown-linux-androideabi") that cannot run on the phone. It is not a
+  // per-package pin issue; stop before the install cascades pkg by pkg.
+  // Run from the launcher, not from env vars: inside proot-distro the Termux
+  // env (TERMUX_VERSION, $PREFIX) leaks in, but the glibc interpreter there
+  // has a clean SOABI and must be allowed to proceed. 24.04 ships 3.12 where
+  // the launcher floor refuses with pythonTooOldError; the deadsnakes PPA
+  // carries 3.14.
+  console.error('');
+  console.error(`🌌 Detected Android/Bionic Python ${py.major}.${py.minor} (SOABI ${py.soabi || 'androideabi'}).`);
+  console.error('');
+  console.error("PyPI has no Bionic wheels for Nova's native dependencies, so the npm/pip");
+  console.error('path cannot complete on-device: every Rust/C package (firecrawl-anydoc,');
+  console.error('cryptography, ...) fails its sdist build one after another.');
+  console.error('');
+  console.error('Install Nova on the phone one of two ways:');
+  console.error('');
+  console.error('  1. Inside a glibc Linux environment via proot-distro (works today):');
+  console.error('     pkg install proot-distro && proot-distro install ubuntu && proot-distro login ubuntu');
+  console.error('     then inside it: `add-apt-repository ppa:deadsnakes/ppa` (need');
+  console.error('     `apt install -y software-properties-common`), `apt update && apt install');
+  console.error('     -y python3.14 python3.14-venv nodejs npm curl` and re-run the npm');
+  console.error('     installer and `nova`. The glibc Python installs the same wheels as a PC.');
+  console.error('  2. The native Termux payload built from a PC (needs Docker; requires the');
+  console.error('     arm64-v8a Termux build): scripts/termux/termux_build.sh --repo <checkout>');
+  console.error('     --tag <a release tag> --out <dir>, as described in');
+  console.error('     website/docs/getting-started/termux.md.');
+  console.error('');
+  console.error('Whatever the route, the phone must run the arm64-v8a (64-bit) Termux');
+  console.error('application; the 32-bit (arm) Termux build cannot run Nova at all.');
+  process.exit(1);
+}
+
+function probeBionic(py) {
+  const r = spawnSync(py.cmd, [...py.prefix, '-c',
+    "import sysconfig; print(sysconfig.get_config_var('SOABI'))"], { encoding: 'utf8' });
+  if (r.status !== 0) return;
+  const soabi = (r.stdout || '').trim();
+  if (soabi.includes('androideabi')) {
+    py.soabi = soabi;
+    bionicStop(py);
+  }
+}
+
 function findPython() {
   const candidates = IS_WIN ? ['python', 'python3', 'py'] : ['python3', 'python'];
   for (const c of candidates) {
@@ -58,7 +106,7 @@ function findPython() {
     if (!m) continue;
     const [major, minor] = [parseInt(m[1]), parseInt(m[2])];
     if (major > MIN_PY_MAJOR || (major === MIN_PY_MAJOR && minor >= MIN_PY_MINOR)) {
-      return c === 'py' ? { cmd: 'py', prefix: ['-3'] } : { cmd: c, prefix: [] };
+      return c === 'py' ? { cmd: 'py', prefix: ['-3'], major, minor } : { cmd: c, prefix: [], major, minor };
     }
   }
   pythonTooOldError();
@@ -103,6 +151,7 @@ function needsProvision(py) {
 
 function provision() {
   const py = findPython();
+  probeBionic(py);
 
   mkdirSync(NOVA_HOME, { recursive: true });
 
@@ -116,17 +165,33 @@ function provision() {
   }
 
   console.log('📦 Installing Nova Agent dependencies (this may take a few minutes)...');
-  const pip = runSync(venvPython(), ['-m', 'pip', 'install', '--upgrade', 'pip', '--quiet']);
+  // uv, not pip: the dependency graph is only resolvable with the repo's
+  // [tool.uv] override-dependencies (e.g. Pillow 13 over browser-harness's
+  // pillow==12.3.0; see tests/pm/test_pip_check.py). pip cannot be told about
+  // these overrides, so a plain `pip install <repo>` dies with
+  // ResolutionImpossible even on a healthy PC. `uv pip install` honors them
+  // when it runs from the checkout (the cwd supplies pyproject.toml).
+  // --editable, not a wheel: setup.py raises on bdist_wheel/sdist outside the
+  // Nix build (class: the npm payload has no bundled assets on its own; they
+  // resolve through the source tree the editable install leaves in place),
+  // and an editable install keeps that layout: APP_ROOT stays the runtime
+  // asset root, venv/bin/nova comes from the entry point.
+  const pip = runSync(venvPython(), ['-m', 'pip', 'install', '--upgrade', 'pip', 'uv', '--quiet']);
   if (pip !== 0) {
-    console.error('pip upgrade failed.');
+    console.error('uv bootstrap failed (pip could not install uv into the venv).');
     process.exit(pip);
   }
-  const install = runSync(venvPython(), ['-m', 'pip', 'install', '--quiet', APP_ROOT]);
+  const uvExe = IS_WIN
+    ? join(VENV_DIR, 'Scripts', 'uv.exe')
+    : join(VENV_DIR, 'bin', 'uv');
+  const install = runSync(uvExe, ['pip', 'install', '--python', venvPython(), '--editable', APP_ROOT, '--quiet'],
+                          { cwd: APP_ROOT });
   if (install !== 0) {
     console.error('Nova Agent installation failed.');
-    console.error('pip printed the failure above. If you are on Termux, PyPI wheels for');
-    console.error('pydantic-core/psutil do not target Android/Bionic libc; use the Nova');
-    console.error('Termux deb package (or a PM wheelhouse) instead of the npm launcher.');
+    console.error('uv printed the failure above. If you are on Android/Termux, PyPI has no');
+    console.error('Bionic wheels for the native dependencies; use the guided stop in the');
+    console.error('launcher or the Termux payload (website/docs/getting-started/termux.md)');
+    console.error('instead of the npm launcher.');
     process.exit(install);
   }
 
